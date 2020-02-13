@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Text, Switch } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Headerbutton from '../components/HeaderButton';
-import Colors from '../constants/Colors';
+import { useDispatch } from 'react-redux';
+import { setFilters } from '../store/actions/mealsActions';
 
 const FilterSwitch = props => {
   return (
@@ -26,6 +27,9 @@ function FiltersScreen(props) {
   const [isVegan, setIsVegan] = useState(false);
   const [isVegetarian, setIsVegeterian] = useState(false);
 
+  //using dispatch
+  const dispatch = useDispatch();
+
   const saveFilters = useCallback(() => {
     const appliedFilters = {
       gluttenFree: isGluttenFree,
@@ -33,8 +37,12 @@ function FiltersScreen(props) {
       vegan: isVegan,
       isVegetarian: isVegetarian
     };
-    console.log(appliedFilters);
-  }, [isGluttenFree, isLactoseFree, isVegan, isVegetarian]);
+    dispatch(setFilters(appliedFilters));
+  }, [isGluttenFree, isLactoseFree, isVegan, isVegetarian, dispatch]);
+
+  useEffect(() => {
+    props.navigation.setParams({ saveFilters: saveFilters });
+  }, [saveFilters]);
 
   props.navigation.setOptions({
     headerTitle: 'Filtered Results',
@@ -51,14 +59,14 @@ function FiltersScreen(props) {
     ),
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={Headerbutton}>
-        <Item title='Menu' iconName='md-save' onPress={route.params.save} />
+        <Item
+          title='Menu'
+          iconName='md-save'
+          onPress={() => props.route.params.saveFilters}
+        />
       </HeaderButtons>
     )
   });
-
-  useEffect(() => {
-    navigation.setParams({ save: saveFilters });
-  }, [saveFilters]);
 
   return (
     <View style={styles.screen}>

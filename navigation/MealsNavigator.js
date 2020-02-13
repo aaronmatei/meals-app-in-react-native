@@ -48,19 +48,7 @@ function MealsNavigator(props) {
       <Stack.Screen
         name='MealDetail'
         component={MealDetailScreen}
-        options={{
-          headerRight: () => (
-            <HeaderButtons HeaderButtonComponent={Headerbutton}>
-              <Item
-                title='Favorite'
-                iconName='ios-heart'
-                onPress={() => {
-                  console.log('Mark as favorite');
-                }}
-              />
-            </HeaderButtons>
-          )
-        }}
+        options={{}}
       />
     </Stack.Navigator>
   );
@@ -123,7 +111,19 @@ function MealsFavTabNavigator(props) {
 const FavMealsStack = createStackNavigator();
 function FavMealsNavigator(props) {
   return (
-    <FavMealsStack.Navigator>
+    <FavMealsStack.Navigator
+      mode='modal'
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#f4511e'
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontFamily: 'open-sans-bold'
+        }
+      }}
+    >
       <FavMealsStack.Screen
         name='Favorites'
         component={FavoritesScreen}
@@ -169,7 +169,12 @@ function AppDrawer() {
         }}
       >
         <MainNavigator.Screen
-          name='MealsFavs'
+          name='Home'
+          component={MealsNavigator}
+          options={{}}
+        />
+        <MainNavigator.Screen
+          name='Favorite Meals'
           component={MealsFavTabNavigator}
           options={{}}
         />
